@@ -11,6 +11,12 @@
     update_cache: True
   tags: prometheus
 
+- name: Create a /opt/prometheus/rules directory if it does not exist
+  ansible.builtin.file:
+    path: /opt/prometheus/rules
+    state: directory
+    mode: '0755'
+  tags: prometheus
 
 - name: Create a /opt/prometheus/alertmanager directory if it does not exist
   ansible.builtin.file:
