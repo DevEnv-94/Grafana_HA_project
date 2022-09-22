@@ -1,0 +1,33 @@
+---
+# tasks file for postgresql
+- name: Create a /opt/postgres directory if it does not exist
+  ansible.builtin.file:
+    path: /opt/postgres
+    state: directory
+    mode: '0755'
+  tags: postgres
+
+
+- name: Copy template environment_file.j2 to /opt/postgresql/environment/.env
+  ansible.builtin.template:
+    src: templates/environment_file.j2
+    dest: /opt/postgres/.env
+    owner: root
+    group: root
+    mode: '0664'
+  tags: postgres
+
+- name: Copy template docker-compose.postgres.j2 for postgres with permissions
+  ansible.builtin.template:
+    src: templates/docker-compose.postgres.j2
+    dest: /opt/postgres/docker-compose.postgres.yml
+    owner: root
+    group: root
+    mode: '0664'
+  tags: postgres
+
+- name: docker-compose -p grafana_ha_postgres -f docker-compose.postgres.yml up -d 
+  ansible.builtin.shell: docker-compose -p grafana_ha_postgres -f docker-compose.postgres.yml up -d 
+  args:
+    chdir: /opt/postgres
+  tags: postgres

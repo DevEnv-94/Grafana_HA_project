@@ -1,0 +1,40 @@
+---
+  
+-
+
+  hosts: all
+
+  roles:
+    - docker
+    - node_exporter
+
+-
+
+  hosts: postgres
+
+  roles:
+    - postgres
+
+-
+
+  hosts: grafana
+
+  roles:
+    - grafana
+
+
+-
+
+  hosts: prometheus
+
+  roles:
+    - prometheus
+
+-
+
+  hosts: nginx
+
+  roles:
+    - certbot_tls
+    - nginx    
+

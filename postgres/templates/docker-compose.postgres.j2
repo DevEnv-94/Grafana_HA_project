@@ -1,0 +1,28 @@
+version: "3.7"
+
+
+networks:
+  postgres_network:
+
+volumes:
+  postgresql-data:
+
+services:
+  postgres:
+    image: postgres:14.5
+    restart: unless-stopped
+    ports:
+        - {{ansible_eth1.ipv4.address}}:5432:5432
+    volumes:
+        - postgresql-data:/var/lib/postgresql/data
+    env_file: 
+        - ./.env
+
+
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter:v0.11.1
+    restart: unless-stopped
+    ports:
+        - {{ansible_eth1.ipv4.address}}:9187:9187
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:{{ postgres_password }}@postgres:5432/postgres?sslmode=disable"

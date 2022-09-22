@@ -1,0 +1,22 @@
+version: "3.7"
+
+networks:
+  grafana_network:
+
+services:
+  grafana:
+    image: grafana/grafana-oss:9.0.1
+    restart: unless-stopped
+    networks:
+      - grafana_network
+    ports:
+        - {{ansible_eth1.ipv4.address}}:3000:3000
+    env_file: ./.env
+      
+  renderer:
+    image: grafana/grafana-image-renderer:3.6.1
+    restart: unless-stopped
+    networks:
+      - grafana_network
+    expose:
+      - 8081

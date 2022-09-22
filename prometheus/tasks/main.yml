@@ -1,0 +1,88 @@
+---
+# tasks file for prometheus
+
+- name: Wait for automatic system updates to complete
+  shell: while lsof /var/lib/dpkg/lock-frontend ; do sleep 10; done;
+
+- name: Update repositories cache and install htpasswd
+  apt:
+    name: apache2-utils
+    state: latest
+    update_cache: True
+  tags: prometheus
+
+
+- name: Create a /opt/prometheus/alertmanager directory if it does not exist
+  ansible.builtin.file:
+    path: /opt/prometheus/alertmanager
+    state: directory
+    mode: '0755'
+  tags: prometheus
+
+- name: Copy alertmanager.yml to /opt/prometheus/alertmanager/ directory with owner and permissions
+  ansible.builtin.copy:
+    src: files/alertmanager.yml
+    dest: /opt/prometheus/alertmanager/
+    owner: root
+    group: root
+    mode: '0644'
+  tags: prometheus
+
+- name: Copy file prometheus.yml with owner and permissions
+  ansible.builtin.template:
+    src: templates/prometheus.yml.j2
+    dest: /opt/prometheus/prometheus.yml
+    owner: root
+    group: root
+    mode: '0644'
+  tags: prometheus
+
+- name: Copy file docker-compose.yml with owner and permissions
+  ansible.builtin.template:
+    src: templates/docker-compose.prometheus.j2
+    dest: /opt/prometheus/docker-compose.prometheus.yml
+    owner: root
+    group: root
+    mode: '0644'
+  tags: prometheus
+
+- name: openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout prometheus.key -out prometheus.crt -subj "/C=EE/ST=Tallinn/L=Tallinn/O=Rebrain/CN={{ansible_eth1.ipv4.address}}" -addext "subjectAltName = DNS:{{ansible_eth1.ipv4.address}}"
+  ansible.builtin.shell: openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout prometheus.key -out prometheus.crt -subj "/C=EE/ST=Tallinn/L=Tallinn/O=Rebrain/CN={{ansible_eth1.ipv4.address}}" -addext "subjectAltName = DNS:{{ansible_eth1.ipv4.address}}"
+  args:
+    chdir: /opt/prometheus
+  tags: prometheus
+
+- name: Set up web.yml file 
+  copy:
+      dest: "/opt/prometheus/web.yml"
+      content: |
+        tls_server_config=
+          cert_file= prometheus.crt
+          key_file= prometheus.key
+  tags: prometheus
+
+- name: echo "basic_auth_users=\n   $(htpasswd -n -b -C 10 -B {{ prometheus_basic_auth_login }} {{ prometheus_basic_auth_password }})" >> web.yml
+  ansible.builtin.shell: echo "basic_auth_users=\n   $(htpasswd -n -b -C 10 -B {{ prometheus_basic_auth_login }} {{ prometheus_basic_auth_password }})" >> web.yml
+  args:
+    chdir: /opt/prometheus
+  tags: prometheus
+
+- name: sed -i 's|:|= |g' web.yml ; sed -i 's|=|:|g' web.yml  (ansible yaml conflict solve)
+  ansible.builtin.shell: sed -i 's|:|= |g' web.yml ; sed -i 's|=|:|g' web.yml 
+  args:
+    chdir: /opt/prometheus
+  tags: prometheus
+
+- name: chmod 644 prometheus.key
+  ansible.builtin.shell: chmod 644 prometheus.key
+  args:
+    chdir: /opt/prometheus
+  tags: prometheus
+
+- name: docker-compose -p grafana_ha_prom -f docker-compose.prometheus.yml up -d 
+  ansible.builtin.shell: docker-compose -p grafana_ha_prom -f docker-compose.prometheus.yml up -d 
+  args:
+    chdir: /opt/prometheus
+  tags: prometheus
+
+

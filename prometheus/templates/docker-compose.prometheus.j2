@@ -1,0 +1,54 @@
+version: "3.7"
+
+networks:
+  prometheus_network:
+
+volumes:
+  prometheus-data:
+  alertmanager-data:
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.36.2
+    networks:
+      - prometheus_network
+    restart: unless-stopped
+    ports:
+      - {{ansible_eth1.ipv4.address}}:9090:9090
+    volumes:
+      - /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /opt/prometheus/web.yml:/etc/prometheus/web.yml
+      - /opt/prometheus/prometheus.key:/etc/prometheus/prometheus.key
+      - /opt/prometheus/prometheus.crt:/etc/prometheus/prometheus.crt
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus" 
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries" 
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.config.file=/etc/prometheus/web.yml"
+
+
+  alertmanager:
+    image: prom/alertmanager:v0.24.0
+    networks:
+      - prometheus_network
+    restart: unless-stopped
+    expose:
+      - 9093
+    volumes:
+      - "- /opt/prometheus/alertmanager:/etc/alertmanager"
+      - alertmanager-data:/data
+    command: --config.file=/etc/alertmanager/alertmanager.yml --log.level=debug
+
+
+  alertmanager-telegram:
+    image: janwh/alertmanager-telegram
+    networks:
+      - prometheus_network
+    restart: unless-stopped
+    expose:
+      - 8080
+    environment:
+      TELEGRAM_CHAT_ID:
+      TELEGRAM_TOKEN:

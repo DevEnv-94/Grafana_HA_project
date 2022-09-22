@@ -1,0 +1,58 @@
+---
+# tasks file for nginx
+- name: Create a nginx directory if it does not exist
+  ansible.builtin.file:
+    path: /opt/nginx/www
+    state: directory
+    mode: '0755'
+  tags: nginx
+
+
+- name: Copy template docker-compose.nginx.j2 for nginx with owner and permissions
+  ansible.builtin.template:
+    src: templates/docker-compose.nginx.j2
+    dest: /opt/nginx/docker-compose.nginx.yml
+    owner: root
+    group: root
+    mode: '0664'
+  tags: nginx
+
+
+- name: Copy template default.conf.j2 for nginx with owner and permissions
+  ansible.builtin.template:
+    src: templates/default.conf.j2
+    dest: /opt/nginx/default.conf
+    owner: root
+    group: root
+    mode: '0664'
+  tags: nginx
+
+
+- name: Copy Dockerfile for nginx with owner and permissions
+  ansible.builtin.copy:
+    src: files/Dockerfile
+    dest: /opt/nginx/Dockerfile
+    owner: root
+    group: root
+    mode: '0664'
+  tags: nginx
+
+- name: creates dhparam
+  ansible.builtin.shell: curl https://ssl-config.mozilla.org/ffdhe2048.txt > /opt/nginx/dhparam
+  args:
+    chdir: /opt/nginx
+    creates: dhparam
+  tags: nginx 
+
+
+- name: Automatically reload nginx with certbot certificate renewal 
+  copy:
+      dest: "/etc/letsencrypt/cli.ini"
+      content: deploy-hook = docker-compose -f /opt/nginx/docker-compose.nginx.yml -p grafana_ha.nginx restart
+  tags: nginx
+
+- name: docker-compose -p grafana_ha_nginx -f docker-compose.nginx.yml up -d --build
+  ansible.builtin.shell: docker-compose -p grafana_ha_nginx -f docker-compose.nginx.yml up -d --build
+  args:
+    chdir: /opt/nginx
+  tags: nginx

@@ -1,0 +1,32 @@
+---
+# tasks file for grafana
+- name: Create a grafana directory if it does not exist
+  ansible.builtin.file:
+    path: /opt/grafana
+    state: directory
+    mode: '0755'
+  tags: grafana
+
+- name: Copy template environment_file for grafana with owner and permissions
+  ansible.builtin.template:
+    src: templates/environment_file.j2
+    dest: /opt/grafana/.env
+    owner: root
+    group: root
+    mode: '0664'
+  tags: grafana
+
+- name: Copy template docker-compose.grafana.j2 for grafana with owner and permissions
+  ansible.builtin.template:
+    src: templates/docker-compose.grafana.j2
+    dest: /opt/grafana/docker-compose.grafana.yml
+    owner: root
+    group: root
+    mode: '0664'
+  tags: grafana
+
+- name: docker-compose -p grafana_ha_grafana -f docker-compose.grafana.yml up -d --build
+  ansible.builtin.shell: docker-compose -p grafana_ha_grafana -f docker-compose.grafana.yml up -d --build
+  args:
+    chdir: /opt/grafana
+  tags: grafana

@@ -1,0 +1,32 @@
+version: "3.7"
+
+
+networks:
+  nginx_network:
+
+services:
+  nginx:
+    build: .
+    restart: unless-stopped
+    networks:
+      - nginx_network
+    ports:
+        - 80:80
+        - 443:443
+    expose:
+      - "8080"
+    volumes:
+      - ./dhparam:/etc/nginx/dhparam
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+      - ./www:/var/www
+
+  nginx_exporter:
+    image: sophos/nginx-vts-exporter:v0.10.7
+    restart: unless-stopped
+    networks:
+      - nginx_network
+    ports:
+        - {{ansible_eth1.ipv4.address}}:9913:9913
+    environment:
+      NGINX_STATUS: "http://nginx:8080/status/format/json"
