@@ -25,10 +25,19 @@
     mode: '0755'
   tags: prometheus
 
-- name: Copy alertmanager.yml to /opt/prometheus/alertmanager/ directory with owner and permissions
+- name: Copy rules to /opt/prometheus/rules/ directory with owner and permissions
   ansible.builtin.copy:
-    src: files/alertmanager.yml
-    dest: /opt/prometheus/alertmanager/
+    src: files/
+    dest: /opt/prometheus/rules/
+    owner: root
+    group: root
+    mode: '0644'
+  tags: prometheus
+
+- name: Copy alertmanager.yml to /opt/prometheus/alertmanager/ directory with owner and permissions
+  ansible.builtin.template:
+    src: templates/alertmanager.yml.j2
+    dest: /opt/prometheus/alertmanager/alertmanager.yml
     owner: root
     group: root
     mode: '0644'
