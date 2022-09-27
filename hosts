@@ -50,7 +50,7 @@ grafana
 postgres
 
 [postgres_pass:vars]
-postgres_password=password
+postgres_password=
 
 [domain:children]
 nginx
