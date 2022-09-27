@@ -3,7 +3,7 @@
 
 
 [postgres:vars]
-ansible_user=root
+ansible_user=
 ansible_become=true 
 
 
@@ -13,16 +13,16 @@ ansible_become=true
 
 
 [grafana:vars]
-ansible_user=root
+ansible_user=
 ansible_become=true 
-gitlab_application_id=9651071783f787a5c9d2be6539ada7d2da56e53d8343d5433ff48df0eec8fb6d
-gitlab_secret=5248ec43b2f2bc1d659f0fe7143493d562633d2016be57509499e95e5e82a8ee
+gitlab_application_id=
+gitlab_secret=
 
 [nginx]
 
 
 [nginx:vars]
-ansible_user=root
+ansible_user=
 ansible_become=true 
 
 
@@ -30,10 +30,13 @@ ansible_become=true
 
 
 [prometheus:vars]
-ansible_user=root
+ansible_user=
 ansible_become=true 
-prometheus_basic_auth_login=user
-prometheus_basic_auth_password=password
+prometheus_basic_auth_login=
+prometheus_basic_auth_password=
+telegram_chat_id=
+telegram_bot_token=
+deadmanssnitch_url=
 
 
 [all:children]
@@ -54,7 +57,7 @@ nginx
 grafana
 
 [domain:vars]
-domain=grafana.lowsup.xyz
+domain=
 
 [all:vars]
-ansible_ssh_private_key_file=/Users/rj/.ssh/id_rsa
+ansible_ssh_private_key_file=
