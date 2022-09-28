@@ -84,15 +84,6 @@ groups:
       summary: Postgresql high rollback rate (instance {{ $labels.instance }})
       description: "Ratio of transactions being aborted compared to committed is > 2 %\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-  - alert: PostgresqlCommitRateLow
-    expr: rate(pg_stat_database_xact_commit[1m]) < 2
-    for: 2m
-    labels:
-      severity: critical
-    annotations:
-      summary: Postgresql commit rate low (instance {{ $labels.instance }})
-      description: "Postgresql seems to be processing very few transactions\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-
   - alert: PostgresqlLowXidConsumption
     expr: rate(pg_txid_current[1m]) < 5
     for: 2m
