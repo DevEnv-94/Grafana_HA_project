@@ -1,0 +1,22 @@
+---
+groups:
+- name: instances
+  rules:
+
+  - alert: Grafana1JobMissing
+    expr: absent(up{job="grafana_1_metrics"})
+    for: 0m
+    labels:
+      severity: warning
+    annotations:
+      summary: Grafana-1 job missing (instance {{ $labels.instance }})
+      description: "A Grafana 1 job has disappeared\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: Grafana2JobMissing
+    expr: absent(up{job="grafana_2_metrics"})
+    for: 0m
+    labels:
+      severity: warning
+    annotations:
+      summary: Grafana-2 job missing (instance {{ $labels.instance }})
+      description: "A Grafana 2 job has disappeared\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
