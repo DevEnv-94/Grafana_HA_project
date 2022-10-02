@@ -31,6 +31,10 @@ server {
 
   access_log /var/log/nginx/access.log logs;
 
+  if ($host !~ ^({{domain}}|www.{{domain}})$ ) {
+      return 444;
+  }
+
 	location / {
 	  return 301 https://$host$request_uri;
 	}
@@ -78,6 +82,10 @@ server {
     # replace with the IP address of your resolver
     resolver 8.8.8.8;
 
+
+    if ($host !~ ^({{domain}}|www.{{domain}})$ ) {
+        return 444;
+    }
 
     location / {
         proxy_pass http://grafana;
