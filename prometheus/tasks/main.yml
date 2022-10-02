@@ -34,6 +34,15 @@
     mode: '0644'
   tags: prometheus
 
+- name: Copy nginx rules to /opt/prometheus/rules/ directory with owner and permissions
+  ansible.builtin.template:
+    src: templates/nginx_rules.yml.j2
+    dest: /opt/prometheus/rules/nginx_rules.yml
+    owner: root
+    group: root
+    mode: '0644'
+  tags: prometheus
+
 - name: Copy alertmanager.yml to /opt/prometheus/alertmanager/ directory with owner and permissions
   ansible.builtin.template:
     src: templates/alertmanager.yml.j2
