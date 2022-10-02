@@ -1,0 +1,23 @@
+---
+groups:
+- name: instances
+  rules:
+
+  - alert: NginxHighHttp4xxErrorRate
+    expr: sum(rate(nginx_server_requests{code="4xx", host="{{ domain }}"}[1m])) / sum(rate(nginx_server_requests[1m])) * 100 > 5
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary:  Nginx high HTTP 4xx error rate (instance {% raw %} {{ $labels.instance }} {% endraw %})
+      description: "Too many HTTP requests with status 4xx (> 5%)\n  VALUE = {% raw %} {{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
+
+  - alert: NginxHighHttp5xxErrorRate
+    expr: sum(rate(nginx_server_requests{code="5xx", host="{{ domain }}"}[1m])) / sum(rate(nginx_server_requests[1m])) * 100 > 5
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary:  Nginx high HTTP 5xx error rate (instance {% raw %} {{ $labels.instance }}{% endraw %})
+      description:  "Too many HTTP requests with status 5xx (> 5%)\n  VALUE = {% raw %}{{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
+
