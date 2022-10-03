@@ -21,3 +21,11 @@ groups:
       summary:  Nginx high HTTP 5xx error rate (instance {% raw %} {{ $labels.instance }}{% endraw %})
       description:  "Too many HTTP requests with status 5xx (> 5%)\n  VALUE = {% raw %}{{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
 
+  - alert: NginxServerDisappeared
+    expr: absent(nginx_server_info)
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: Nginx Server has Disappeared (instance {% raw %}{{ $labels.instance }}{% endraw %})
+      description: "Nginx Server has Disappeared\n  VALUE = {% raw %}{{ $value }}\n  LABELS = {{ $labels }}{% endraw %}"
