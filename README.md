@@ -601,6 +601,8 @@ inhibit_rules:
 
 * Rules for [prometheus](https://github.com/DevEnv-94/Grafana_HA_project/blob/master/prometheus/files/prom_rules.yml).
 
+* Rules for [node](https://github.com/DevEnv-94/Grafana_HA_project/blob/master/prometheus/files/node_rules.yml).
+
 ### Alerts
 
 Telegram Alerts
