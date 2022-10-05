@@ -7,7 +7,7 @@ route:
   routes:
   - receiver: 'telegram' 
     matchers:
-    - severity=~"critical|warning" 
+    - severity=~"critical|warning|info" 
     
   - receiver: 'DeadMansSnitch'
     repeat_interval: 1m
