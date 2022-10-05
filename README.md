@@ -26,7 +26,7 @@ ansible_become=true
 
 [grafana:vars]
 ansible_user=
-ansible_become=
+ansible_become=true
 gitlab_application_id=
 gitlab_secret=
 
@@ -43,7 +43,7 @@ ansible_become=true
 
 [prometheus:vars]
 ansible_user=
-ansible_become=
+ansible_become=true
 prometheus_basic_auth_login=
 prometheus_basic_auth_password=
 telegram_chat_id=  #How to https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id/38388851#38388851
@@ -200,7 +200,7 @@ COPY --from=builder /root/nginx-${version}/objs/ngx_http_vhost_traffic_status_mo
 </details>
 
 
-<details><summary>Nginx Grafana site config file (click here)</summary>
+<details><summary>Nginx site's config file (click here)</summary>
 <p>
 
 ```bash
