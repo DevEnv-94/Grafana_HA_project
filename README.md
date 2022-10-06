@@ -551,7 +551,7 @@ tls_server_config:
   cert_file: /etc/prometheus/prometheus.crt
   key_file: /etc/prometheus/prometheus.key
 basic_auth_users:
-   {{ prometheus_basic_auth_login }}: {{ prometheus_basic_auth_password }}
+   {{ prometheus_basic_auth_login }}: hash({{ prometheus_basic_auth_password }})
 ```
 
 </p>
