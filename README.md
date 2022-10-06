@@ -547,11 +547,13 @@ scrape_configs:
 <details><summary>Web.yml config file (click here)</summary>
 <p>
 ```yaml
+
 tls_server_config:
   cert_file: /etc/prometheus/prometheus.crt
   key_file: /etc/prometheus/prometheus.key
 basic_auth_users:
    {{ prometheus_basic_auth_login }}: hash({{ prometheus_basic_auth_password }})
+
 ```
 
 </p>
