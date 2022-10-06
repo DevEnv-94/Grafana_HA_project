@@ -419,7 +419,7 @@ POSTGRES_PASSWORD={{ postgres_password }}
 </p>
 </details>
 
-## Prometheus, Alertmanager, Rules and Alerts in Telegram and DeadManSnitch
+## Prometheus with TLS (self-signed) and Basic Auth, Alertmanager, Rules and Alerts in Telegram and DeadManSnitch
 
 Prometheus and Alertmanager Docker-Compose file
 ```yaml
@@ -494,10 +494,11 @@ scrape_configs:
       username: "{{ prometheus_basic_auth_login }}"
       password: "{{ prometheus_basic_auth_password }}"
     tls_config:
-      insecure_skip_verify: true
-      ca_file: /etc/prometheus/prometheus.crt
+       insecure_skip_verify: true # Self-Signed ssl
+       cert_file: /etc/prometheus/prometheus.crt
+       key_file: /etc/prometheus/prometheus.key
     static_configs:
-      - targets: ['{{ansible_eth1.ipv4.address}}:9090']
+      - targets: ['prometheus:9090']
 
   - job_name: 'prom_node_ex'
     static_configs:
