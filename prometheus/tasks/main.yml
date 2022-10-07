@@ -97,8 +97,8 @@
     chdir: /opt/prometheus
   tags: prometheus
 
-- name: chmown nobody:root prometheus.key
-  ansible.builtin.shell: chmown nobody:root prometheus.key
+- name: chown nobody:root prometheus.key
+  ansible.builtin.shell: chown nobody:root prometheus.key
   args:
     chdir: /opt/prometheus
   tags: prometheus
