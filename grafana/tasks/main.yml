@@ -25,8 +25,8 @@
     mode: '0664'
   tags: grafana
 
-- name: docker-compose -p grafana_ha_grafana -f docker-compose.grafana.yml up -d --build
-  ansible.builtin.shell: docker-compose -p grafana_ha_grafana -f docker-compose.grafana.yml up -d --build
+- name: docker-compose -p grafana_ha_grafana -f docker-compose.grafana.yml up -d 
+  ansible.builtin.shell: docker-compose -p grafana_ha_grafana -f docker-compose.grafana.yml up -d 
   args:
     chdir: /opt/grafana
   tags: grafana
