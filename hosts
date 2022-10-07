@@ -29,14 +29,15 @@ ansible_become=true
 [prometheus]
 
 
+
 [prometheus:vars]
 ansible_user=
-ansible_become=true 
+ansible_become=true
 prometheus_basic_auth_login=
 prometheus_basic_auth_password=
 telegram_chat_id=  #How to https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id/38388851#38388851
 telegram_bot_token=
-deadmanssnitch_url=
+deadmanssnitch_url= #how to [https://deadmanssnitch.com/docs]
 
 
 [all:children]
@@ -55,9 +56,11 @@ postgres_password=
 [domain:children]
 nginx
 grafana
+prometheus
 
 [domain:vars]
 domain=
+#without www. part
 
 [all:vars]
 ansible_ssh_private_key_file=
