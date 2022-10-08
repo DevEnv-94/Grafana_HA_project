@@ -333,7 +333,7 @@ services:
     env_file: ./.env
       
   renderer:
-    image: grafana/grafana-image-renderer:3.6.1
+    image: grafana/grafana-image-renderer:3.5.0 #grafana render does not work on 3.6.1(latest) version 
     restart: unless-stopped
     networks:
       - grafana_network
