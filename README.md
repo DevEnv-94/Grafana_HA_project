@@ -1,8 +1,6 @@
 # Grafana_HA_project
 
-The project was created to implement Grafana High Availability with 2 Grafana instances, PostgreSQL Database for storage and Load balancer Nginx.
-Prometheus,Alertmanager and exporters to monitor this ecosystem.
-Entire project was automated with Ansible.
+This project was created to implement high availability for Grafana using two Grafana instances, a PostgreSQL database for storage, and an Nginx load balancer. It also includes Prometheus, Alertmanager, and exporters to monitor this ecosystem. The entire project was automated using Ansible.
 
 
 ![Grafana_ha](https://github.com/DevEnv-94/Grafana_HA_project/blob/master/images/grafana_ha.png)
@@ -625,7 +623,7 @@ Telegram Alerts
 
 
 DeadManSnitch
-This is reciever created for All prometheus monitoring system, always firing and sends signal every minute, when prometheus is dead or some trouble with alertmanager, stops sending signal and you recieve alert.
+DeadManSnitch is a receiver that is always active and sends a signal every minute to indicate that the Prometheus monitoring system is functioning properly. If Prometheus or Alertmanager experience any issues, the signal will stop being sent and an alert will be triggered. This receiver is used to monitor the overall health of the Prometheus system.
 
 ```yaml
   - alert: PrometheusAlertmanagerE2eDeadManSwitch
@@ -638,7 +636,7 @@ This is reciever created for All prometheus monitoring system, always firing and
       description: "Prometheus DeadManSwitch is an always-firing alert. It's used as an end-to-end test of Prometheus through the Alertmanager.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 ```
 
-This rule have to be always firing.
+This rule is intended to be constantly active.
 
 ![deadmansnitch](https://github.com/DevEnv-94/Grafana_HA_project/blob/master/images/deadmansnitch.png)
 ![deadmansnitch2](https://github.com/DevEnv-94/Grafana_HA_project/blob/master/images/deadmansnitch2.png)
